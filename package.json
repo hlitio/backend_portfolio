@@ -1,0 +1,33 @@
+{
+  "name": "backend_portfolio",
+  "version": "1.0.0",
+  "description": "Backend Portfolio con GraphQL, Sequelize y Apollo",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "watch": "nodemon server.js --ext js,graphql --exec babel-node"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hlitio/backend_portfolio.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hlitio/backend_portfolio/issues"
+  },
+  "homepage": "https://github.com/hlitio/backend_portfolio#readme",
+  "dependencies": {
+    "apollo-server-express": "^3.11.1",
+    "express": "^4.18.2",
+    "mysql2": "^3.0.1",
+    "sequelize": "^5.15.1",
+    "sequelize-cli": "^5.4.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.20.12",
+    "@babel/node": "^7.20.7",
+    "@babel/preset-env": "^7.20.2",
+    "nodemon": "^2.0.20"
+  }
+}
