@@ -7,7 +7,8 @@ const sequelize = new Sequelize ("portfolio", "root", "123456789",{
 })
 
 const models = {
-    portafolio: sequelize.import("./portafolio.js")
+    portafolio: sequelize.import("./portafolio.js"),
+    usuario: sequelize.import("./usuario.js")
 }
 
 models.sequelize = sequelize

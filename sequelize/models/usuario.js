@@ -1,37 +1,29 @@
 const sequelize = require("sequelize");
 
 module.exports =( sequelize, DataTypes)=>{
-    const Portafolio = sequelize.define("Portafolio",{
-        idportafolio:{
+   
+    const Usuario = sequelize.define("Usuario",{
+        idusuario:{
             type: DataTypes.INTEGER,
             autoIncrement: true,
             primaryKey: true,
             allowNull: false
         },
-        imagen:{
+        correo:{
             type: DataTypes.STRING,
             allowNull: false
         },
-        imagen_alt:{
+        password:{
             type: DataTypes.STRING,
             allowNull: false
         },
-        titulo:{
-            type: DataTypes.STRING,
-            allowNull: false
-        },
-        subtitulo:{
-            type: DataTypes.STRING,
-            allowNull: false
-        },
-        enlace:{
-            type: DataTypes.STRING,
+        idperfil:{
+            type: DataTypes.INTEGER,            
             allowNull: false
         }
     },{ timestamps: false,
         freezeTableName: true
      })
 
-
-    return Portafolio
+    return Usuario
 }

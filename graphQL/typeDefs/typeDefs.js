@@ -10,15 +10,26 @@ const typeDefs = gql`
     enlace: String!
   }
 
+  type Usuario{
+    idusuario: Int!,
+    correo: String!,
+    password: String!,
+    idperfil: Int!
+  }
+
   type Query{
 
-    getUsuarios:[Portafolio],
-    getUsuario(idportafolio:Int!): Portafolio
+    getTrabajos:[Portafolio],
+    getTrabajo(idportafolio:Int!): Portafolio
   }
 
   type Mutation{
     
-    createUsuario(imagen:String!, imgagen_alt:String!, titulo: String!, subtitulo: String!, enlace: String!):Portafolio!
+    createTrabajo(imagen:String!, imagen_alt:String!, titulo: String!, subtitulo: String!, enlace: String!):Portafolio!
+
+    createUsuario( correo: String!, password: String!, idperfil: Int!):Usuario!
+
+
   }
 
 
