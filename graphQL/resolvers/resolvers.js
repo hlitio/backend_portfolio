@@ -1,17 +1,21 @@
 const resolvers = {
     Query:{
-        async getUsuarios( root, args, { models}){
+        async getTrabajos( root, args, { models}){
             return await models.portafolio.findAll()
         },
 
-        async getUsuario(root, args, { models}){
+        async getTrabajo(root, args, { models}){
             return await models.portafolio.findByPk(args.idportafolio)
         }
     },
 
     Mutation: {
-        async createUsuario(root,{imagen,imagen_alt,titulo,subtitulo,enlace},{ models }){
+        async createTrabajo(root,{imagen,imagen_alt,titulo,subtitulo,enlace},{ models }){
             return await models.portafolio.create ({imagen,imagen_alt,titulo,subtitulo,enlace})
+        },
+
+        async createUsuario(root,{correo,password,idperfil},{ models }){
+            return await models.usuario.create ({correo,password,idperfil})
         }
     }
 
