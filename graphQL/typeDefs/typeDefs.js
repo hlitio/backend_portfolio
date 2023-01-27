@@ -8,7 +8,7 @@ const typeDefs = gql`
 
   type Response {
     success: Boolean!
-    token: String
+    token: String    
     errors: [Error]
   }
 
@@ -25,7 +25,13 @@ const typeDefs = gql`
     idusuario: Int!,
     correo: String!,
     password: String!,
+    idperfil: Int
+  }
+
+  type Perfil{
     idperfil: Int!
+    nombre: String!
+    apellido: String!
   }
 
   type Query{
@@ -40,9 +46,11 @@ const typeDefs = gql`
     
     createTrabajo(imagen:String!, imagen_alt:String!, titulo: String!, subtitulo: String!, enlace: String!):Portafolio!
 
-    createUsuario( correo: String!, password: String!, idperfil: Int!):Response!
+    createUsuario( correo: String!, password: String!):Response!
 
+    updateUsuario( idusuario: Int!, correo: String, password: String, idperfil: Int):Response!
 
+    createPerfil( nombre: String!, apellido: String!, token: String!): Response!
   }
 
 

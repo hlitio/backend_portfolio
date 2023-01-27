@@ -31,7 +31,10 @@ const formatErrors = (error,otherErrors)=>{
   
   }
 
-
+  const secret = new TextEncoder().encode(
+    'cc7e0d44fd473002f1c42167459001140ec6389b7353f8088f4d9a95f2f596f2',
+    )
+  const alg = 'HS256'
 
 
 
@@ -51,12 +54,22 @@ const resolvers = {
 
         login: async (root,{correo, password}, { models })=>{
             
+            if (correo.length<1){
+              return {
+                success:false,
+                errors:[{path:'correo', message:'El campo correo no contiene datos'}]
+              }
+            }
+
+
             const usuario = await models.usuario.findOne(
                 {
-                    where:{correo:correo}
+                  where:{correo:correo}
                 })
+            
 
-            console.log(usuario)
+            console.log("Se esta buscando el usuario", correo)
+            console.log("IDUSUARIO: ", usuario.idusuario)
 
             if(!usuario){
                 return {
@@ -72,14 +85,11 @@ const resolvers = {
                   errors:[{path:'password', message:'Password inválido'}]
                 }
               }
-          
+          //---------------
 
-            const secret = new TextEncoder().encode(
-            'cc7e0d44fd473002f1c42167459001140ec6389b7353f8088f4d9a95f2f596f2',
-            )
-            const alg = 'HS256'
+              console.log("palabra secreta: ", secret)
             
-            const jwt = await new jose.SignJWT({ user:123456 })
+            const jwt = await new jose.SignJWT({ user:usuario.idusuario })
             .setProtectedHeader({ alg })
             .setIssuedAt()
             .setIssuer('urn:example:issuer')
@@ -109,16 +119,16 @@ const resolvers = {
             return await models.portafolio.create ({imagen,imagen_alt,titulo,subtitulo,enlace})
         },
 
-        createUsuario: async (root,{correo,password,idperfil},{ models })=>{
+        createUsuario: async (root,{correo,password},{ models })=>{
             const otherErrors = []
             try{
                 let passencryp = await bcryptjs.hash(password,8)
-                console.log ("Token: ", passencryp)
                 
-                const usuariocreado = await models.usuario.create ({correo, password:passencryp,idperfil})
-                //console.log (usuariocreado)
+                
+                const usuariocreado = await models.usuario.create ({correo, password:passencryp})
+                
                 return {
-                    success: usuariocreado && usuariocreado.idusuario,
+                    success: usuariocreado && usuariocreado.idusuario,                    
                     errors: []
                   };
                 
@@ -129,7 +139,81 @@ const resolvers = {
                   };
                 
             }
+        },
+
+        updateUsuario: async (root ,args,{models})=>{
+            const usuariomodificado= await models.usuario.update({
+                idperfil:args.idperfil
+              },
+              {where:{
+                idusuario:args.idusuario
+              }})
+            console.log(usuariomodificado)
+            return({
+              success:true
+            })
+
+        },
+
+
+        createPerfil: async (root,{nombre,apellido, token}, { models})=>{
+          //----- obtenemos y Verificamos el token -----------------------------
+          const { payload, protectedHeader } = await jose.jwtVerify(token, secret, {
+            issuer: 'urn:example:issuer',
+            audience: 'urn:example:audience',
+          })
+          
+          console.log(payload.user)
+          
+          if (payload.exp>Date.now()){ 
+            return({
+              success:false,
+              erros: "Expiro el tiempo de sesión"
+
+            })  
+            
+          }
+
+          
+
+          
+
+          
+
+          const otherErrors=[]
+
+          try{
+            const perfilcreado = await models.perfil.create({nombre,apellido})
+            //------------------------------------------------------------------------------
+            const usuariomodificado= await models.usuario.update({
+              idperfil:perfilcreado.idperfil
+            },
+            {where:{
+              idusuario:payload.user
+            }})
+            console.log("usuario modificado: ",usuariomodificado)
+
+            //------------
+
+
+
+            return{
+              success: perfilcreado && perfilcreado.idperfil,
+              errors: []
+              
+            };
+          }catch(error){
+            return {
+                success: false,
+                errors: formatErrors(error,otherErrors)
+              };
+            
         }
+        }
+
+
+
+
     }
 
 
