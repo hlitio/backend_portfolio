@@ -37,7 +37,8 @@ const typeDefs = gql`
   type Query{
 
     getTrabajos:[Portafolio],
-    getTrabajo(idportafolio:Int!): Portafolio
+    getTrabajo(idportafolio:Int!): Portafolio,
+    getUsuario(token:String!): Usuario
   }
 
   type Mutation{

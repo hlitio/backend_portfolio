@@ -29,12 +29,16 @@ const formatErrors = (error,otherErrors)=>{
     }
     return [uknownError]
   
-  }
+}
 
-  const secret = new TextEncoder().encode(
+const secret = new TextEncoder().encode(
     'cc7e0d44fd473002f1c42167459001140ec6389b7353f8088f4d9a95f2f596f2',
     )
-  const alg = 'HS256'
+const alg = 'HS256'
+
+async function validarUsuario(token){
+ 
+}
 
 
 
@@ -47,6 +51,32 @@ const resolvers = {
 
         async getTrabajo(root, args, { models}){
             return await models.portafolio.findByPk(args.idportafolio)
+        },
+
+        getUsuario: async( root,{token},{models})=>{
+        
+           //----- obtenemos y Verificamos el token -----------------------------
+          const { payload, protectedHeader } = await jose.jwtVerify(token, secret, {
+            issuer: 'urn:example:issuer',
+            audience: 'urn:example:audience',
+          })
+  
+          console.log("buscando el usurio con ID: ", payload.user)
+  
+          if (payload.exp>Date.now()){ 
+            console.log("paso algo malo")
+            return({
+              idusuario:null,
+              password:null,
+              idperfil:null
+
+          })  
+    
+  }
+          
+          return await models.usuario.findByPk(payload.user)
+          
+         
         }
     },
 
